@@ -7,12 +7,11 @@ import { signJwt } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 function setAuthCookie(res, token) {
-  const isProd = process.env.NODE_ENV === "production";
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: isProd, 
-    sameSite: "lax",
+    secure: true, 
+    sameSite: "None",
     maxAge: 24 * 60 * 60 * 1000,
     path: "/",
   });
