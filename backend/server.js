@@ -18,7 +18,7 @@ const app = express();
 // ---------- Middlewares ---------- process.env.CLIENT_ORIGIN ||
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://admin-panel-tau.vercel.app",
     credentials: true,
   })
 );
