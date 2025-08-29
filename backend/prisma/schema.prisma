@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String    @unique
+  mobNo       String?
+  password    String
+  role        String    @default("customer")
+  address     Address?
+  orders      Orders[]
+  cartItems   Cart[]
+  reviews     Reviews[]
+  createdAt   DateTime  @default(now())
+}
+
+model Address {
+  id          Int       @id @default(autoincrement())
+  state       String
+  city        String
+  pincode     String
+  addressLine String
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int       @unique
+}
+
+model Admin {
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String    @unique
+  password    String
+  role        String    @default("admin")
+  createdAt   DateTime  @default(now())
+}
+
+model Product {
+  id          Int             @id @default(autoincrement())
+  title       String
+  description String?
+  price       Float
+  discount    Int
+  stock       Int
+  images      ProductImage[]
+  orders      Orders[]
+  cartItems   Cart[]
+  reviews     Reviews[]
+  createdAt   DateTime        @default(now())
+}
+
+model ProductImage {
+  id          Int      @id @default(autoincrement())
+  url         String
+  publicId    String 
+  isPrimary   Boolean  @default(false)
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId   Int
+}
+
+model Orders {
+  id          Int        @id @default(autoincrement())
+  user        User       @relation(fields: [userId], references: [id])
+  userId      Int
+  product     Product    @relation(fields: [productId], references: [id])
+  productId   Int
+  quantity    Int
+  expected    DateTime
+  total       Float
+  paymentMode String     @default("COD")
+  status      String     @default("pending")
+  createdAt   DateTime   @default(now())
+}
+
+model Reviews {
+  id          Int       @id @default(autoincrement())
+  product     Product   @relation(fields: [productId], references: [id])
+  productId   Int
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  rating      Int
+  feedback    String
+}
+
+model Cart {
+  id          Int       @id @default(autoincrement())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  product     Product   @relation(fields: [productId], references: [id])
+  productId   Int
+}

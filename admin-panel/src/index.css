@@ -1,0 +1,106 @@
+:root {
+  /* Primary Colors */
+  --primary-light: #38bdf8;
+  --primary: #0ea5e9;
+  --primary-dark: #0369a1;
+
+  /* Neutral Colors (Gray Scale) */
+  --neutral-light: #f3f4f6;
+  --neutral: #6b7280;
+  --neutral-dark: #000000;
+  --neutral-black: #111827;
+
+  /* Semantic Colors - Success */
+  --success-light: #4ade80;
+  --success: #22c55e;
+  --success-dark: #15803d;
+
+  /* Semantic Colors - Warning */
+  --warning-light: #fbbf24;
+  --warning: #f59e0b;
+  --warning-dark: #b45309;
+
+  /* Semantic Colors - Error/Danger */
+  --error-light: #f87171;
+  --error: #ef4444;
+  --error-dark: #b91c1c;
+
+  /* Background Colors */
+  --bg-primary: var(--neutral-light);
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f9fafb;
+  --bg-overlay: rgba(255, 255, 255, 0.8);
+
+  /* Text Colors */
+  --text-primary: var(--neutral-black);
+  --text-secondary: var(--neutral-dark);
+  --text-tertiary: var(--neutral);
+  --text-inverse: #ffffff;
+
+  /* Border Colors */
+  --border-light: var(--neutral-light);
+  --border-medium: var(--neutral);
+  --border-bold: var(--neutral-dark);
+
+  /* Shadow Colors */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.2);
+
+  /* Component Specific Variables */
+  --sidebar-bg: var(--neutral-dark);
+  --sidebar-text: var(--neutral-light);
+  --header-bg: var(--neutral-light);
+  --header-border: var(--border-light);
+  --card-bg: #ffffff;
+  --card-border: var(--border-light);
+  --input-bg: #ffffff;
+  --input-border: var(--border-medium);
+  --input-focus-border: var(--primary);
+  --table-header-bg: var(--neutral-light);
+  --table-row-even: var(--neutral-light);
+  --table-row-hover: var(--neutral);
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] {
+  --bg-primary: var(--neutral-black);
+  --bg-secondary: var(--neutral-dark);
+  --bg-tertiary: var(--neutral);
+  --bg-overlay: rgba(0, 0, 0, 0.8);
+
+  --text-primary: #ffffff;
+  --text-secondary: var(--neutral-light);
+  --text-tertiary: var(--neutral);
+
+  --border-light: var(--neutral-dark);
+  --border-medium: var(--neutral);
+  --border-bold: var(--neutral-light);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+
+  --sidebar-bg: var(--neutral-black);
+  --header-bg: var(--neutral-dark);
+  --card-bg: var(--neutral-dark);
+  --input-bg: var(--neutral-dark);
+  --table-header-bg: var(--neutral);
+  --table-row-even: var(--neutral-dark);
+  --table-row-hover: var(--neutral);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: monospace;
+}
+
+body{
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
