@@ -1,7 +1,7 @@
 import "./Home.css";
 import react, { useState } from "react";
 import Signup from "../../components/auth/Signup";
-import Signin from "../../components/auth/signin";
+import Signin from "../../components/auth/Signin";
 import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 
