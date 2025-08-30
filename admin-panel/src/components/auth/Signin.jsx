@@ -18,11 +18,11 @@ export default function Signin({ setAuth }) {
 
     try {
       const res = await api.post("/authentication/signin", form);
-      setMsg(res.data.message);
+      setMsg({ message: res.data.message, status: "success" });
       setAuth(null);
       window.location.reload();
     } catch (err) {
-      setMsg(err.response?.data?.error || "Something went wrong");
+      setMsg({ message: err.response?.data?.error, status: "error" });
     } finally {
       setIsLoading(false);
     }
@@ -91,11 +91,8 @@ export default function Signin({ setAuth }) {
         </form>
 
         {msg && (
-          <div className={`auth-message ${msg.includes("wrong") ? "error" : "success"}`}>
-            <span className="message-icon">
-              {msg.includes("wrong") ? "⚠️" : "✅"}
-            </span>
-            {msg}
+          <div className={`auth-message ${msg.status === "error" ? "error" : "success"}`}>
+            {msg.message}
           </div>
         )}
 

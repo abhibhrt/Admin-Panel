@@ -5,11 +5,8 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// ✅ Get all orders with user + product + address
-router.get(
-  "/",
-  protect,
-  asyncHandler(async (req, res) => {
+router.get("/",  protect,  asyncHandler(async (req, res) => {
+
     const orders = await prisma.orders.findMany({
       include: {
         user: {
@@ -29,7 +26,6 @@ router.get(
   })
 );
 
-// ✅ Update order status
 router.put(
   "/:id/status",
   protect,
