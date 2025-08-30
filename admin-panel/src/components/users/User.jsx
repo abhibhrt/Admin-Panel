@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./User.css";
 import { useSelector } from "react-redux";
-import UserDetails from "../common/userDetails";
+import UserDetails from "../common/UserDetails";
 
 const User = () => {
   const users = useSelector((state) => state.user.data) || [];

@@ -28,17 +28,6 @@ const UserDetails = ({ user }) => {
     return (
         <div className="customer-user-details-container">
             <div className="customer-user-details-content">
-                <div className="customer-user-header">
-                    <div className="customer-user-avatar">
-                        {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                    </div>
-                    <div className="customer-user-title">
-                        <h1>User Details</h1>
-                        <p>Complete information about the user</p>
-                    </div>
-                </div>
-
-                {/* User Info Card */}
                 <div className="customer-info-card">
                     <div className="customer-card-header">
                         <FaIdCard className="customer-card-icon" />
