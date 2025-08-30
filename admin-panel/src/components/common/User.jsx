@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import UserDetails from "../userdetails/UserDetails";
-import "./user-order.css";
+import "./common.css";
 
 const User = () => {
   const users = useSelector((state) => state.user.data) || [];
@@ -65,13 +65,13 @@ const User = () => {
                   <td className="customer-user-table-actions">
                     <div className="customer-user-actions">
                       <button
-                        className="customer-user-action-btn customer-user-view-btn"
+                        className="common-btn-1 info"
                         onClick={() => setUserDetails(user)}
                       >
                         Details
                       </button>
                       {/* <button
-                        className="customer-user-action-btn customer-user-orders-btn"
+                        className="common-btn-1 warning"
                         onClick={() => alert(`Show orders for ${user.name}`)}
                       >
                         Orders

@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import api from "../../utils/axios";
 import { clearPersonalData } from "../../redux/private/personalSlice";
 import Analytics from "../../components/analytics/Analytics";
-import Orders from "../../components/user-order/Orders";
+import Orders from "../../components/common/Orders";
 import FetchData from "../../utils/fetchData";
-import User from "../../components/user-order/User";
+import User from "../../components/common/User";
 
 // React Icons
 import { FaChartBar, FaUsers, FaBoxOpen, FaClipboardList, FaSignOutAlt } from "react-icons/fa";
+import Products from "../../components/common/Products";
 
 export default function Dashboard() {
     const data = useSelector((state) => state.personal.data);
@@ -148,6 +149,7 @@ export default function Dashboard() {
                 {selected === "analytics" && <Analytics />}
                 {selected === "orders" && <Orders />}
                 {selected === "users" && <User />}
+                {selected === "products" && <Products />}
             </main>
         </div>
     );

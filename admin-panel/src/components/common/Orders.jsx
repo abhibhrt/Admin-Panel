@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./user-order.css";
+import "./common.css";
 import { useSelector, useDispatch } from "react-redux";
 import { updateOrderData } from "../../redux/private/orderSlice";
 import api from "../../utils/axios";
@@ -82,7 +82,7 @@ const Orders = () => {
                   <td className="customer-order-table-customer">
                     <div className="customer-order-customer-info">
                       <div className="customer-order-customer-name">
-                        <button className="customer-user-action-btn customer-user-view-btn"
+                        <button className="common-btn-1 success"
                           onClick={() => setViewItem({ type: "user", data: order.user })}>
                           User View
                         </button>
@@ -92,7 +92,7 @@ const Orders = () => {
                   <td className="customer-order-table-product">
                     <div className="customer-order-product-info">
                       <div className="customer-order-product-name">
-                        <button className="customer-user-action-btn customer-user-orders-btn"
+                        <button className="common-btn-1"
                         onClick={() => setViewItem({ type: "product", data: order.product })}>
                           Product View
                         </button>

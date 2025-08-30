@@ -1,6 +1,7 @@
 import express from "express";
 import prisma from "../utils/prismaClient.js";
 import { protect } from "../middleware/authMiddleware.js";
+import { validateProductData } from "../middleware/validateProductData.js";
 import asyncHandler from "express-async-handler";
 
 const router = express.Router();
@@ -8,7 +9,7 @@ const router = express.Router();
 // CREATE Product with optional images
 router.post(
   "/",
-  protect,
+  protect, validateProductData,
   asyncHandler(async (req, res) => {
     const { title, description, price, discount, stock, images } = req.body;
 
