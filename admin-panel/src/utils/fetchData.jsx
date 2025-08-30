@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import api from "../utils/axios";
 import { setUserData, clearUserData } from "../redux/private/userSlice";
+import { setOrderData, clearOrderData } from "../redux/private/orderSlice";
 
 export default function FetchData() {
     const dispatch = useDispatch();
@@ -18,6 +19,18 @@ export default function FetchData() {
             }
         };
 
+        const fetchOrders = async () => {
+            try {
+                const res = await api.get("/orders");
+                if (res.data) {
+                    dispatch(setOrderData(res.data));
+                }
+            } catch (err) {
+                dispatch(clearOrderData());
+            }
+        };
+
+        fetchOrders();
         fetchUsers();
     }, [dispatch]);
 

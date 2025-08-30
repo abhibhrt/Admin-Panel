@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import "./User.css";
 import { useSelector } from "react-redux";
-import UserDetails from "../common/UserDetails";
+import UserDetails from "../userDetails/UserDetails";
 
 const User = () => {
   const users = useSelector((state) => state.user.data) || [];
-  console.log(users);
   const [userDetails, setUserDetails] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -21,10 +19,7 @@ const User = () => {
       : "";
 
     const inOrders = user.orders
-      ? user.orders
-          .map((order) => order.product?.title || "")
-          .join(" ")
-          .toLowerCase()
+      ? user.orders.map((order) => order.product?.title || "").join(" ").toLowerCase()
       : "";
 
     return (
@@ -36,45 +31,46 @@ const User = () => {
   });
 
   return (
-    <div className="users-container">
-      <input
-        type="text"
-        placeholder="Search users, address, or orders..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="users-search"
-      />
+    <div className="customer-user-container">
+      <div className="customer-user-header">
+        <input
+          type="text"
+          placeholder="Search users, address, or orders..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="customer-user-search-input"
+        />
+      </div>
 
-      {/* 🧾 Users Table */}
-      <div className="users-table-container">
-        <table className="users-table">
+      <div className="customer-user-table-container">
+        <table className="customer-user-table">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Orders</th>
-              <th>Actions</th>
+              <th className="customer-user-table-id">User Id</th>
+              <th className="customer-user-table-name">Name</th>
+              <th className="customer-user-table-email">Email</th>
+              <th className="customer-user-table-orders">Orders</th>
+              <th className="customer-user-table-actions">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredUsers.length > 0 ? (
               filteredUsers.map((user, index) => (
-                <tr key={user.id || index}>
-                  <td>{index + 1}</td>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.orders?.length || 0}</td>
-                  <td>
-                    <div className="user-actions-container">
+                <tr key={user.id || index} className="customer-user-row">
+                  <td className="customer-user-table-id">{index + 1}</td>
+                  <td className="customer-user-table-name">{user.name}</td>
+                  <td className="customer-user-table-email">{user.email}</td>
+                  <td className="customer-user-table-orders">{user.orders?.length || 0}</td>
+                  <td className="customer-user-table-actions">
+                    <div className="customer-user-actions">
                       <button
-                        className="user-action-btn user-view-btn"
+                        className="customer-user-action-btn customer-user-view-btn"
                         onClick={() => setUserDetails(user)}
                       >
                         View Details
                       </button>
                       <button
-                        className="user-action-btn user-orders-btn"
+                        className="customer-user-action-btn customer-user-orders-btn"
                         onClick={() => alert(`Show orders for ${user.name}`)}
                       >
                         View Orders
@@ -85,7 +81,7 @@ const User = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="no-users">
+                <td colSpan="5" className="customer-user-no-data">
                   No users found
                 </td>
               </tr>

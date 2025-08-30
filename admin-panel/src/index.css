@@ -24,6 +24,11 @@
   --error-light: #f87171;
   --error: #ef4444;
   --error-dark: #b91c1c;
+  
+  /* Semantic Colors - Info */
+  --info-light: #71b5f8;
+  --info: #4488ef;
+  --info-dark: #1c63b9;
 
   /* Background Colors */
   --bg-primary: var(--neutral-light);
@@ -103,4 +108,28 @@ body{
   padding: 0;
   margin: 0;
   overflow-x: hidden;
+}
+
+/* ===== Scrollbar Styling (For Modern Browsers) ===== */
+::-webkit-scrollbar {
+  height: 2px; 
+  width: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+* {
+  scrollbar-width: thin; 
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent; 
 }
