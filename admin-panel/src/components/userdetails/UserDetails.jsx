@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import "./UserDetails.css";
 
-const UserDetails = ({ user }) => {
+const UserDetails = ({ user, onClose }) => {
     if (!user) {
         return (
             <div className="user-details-container">
@@ -30,6 +30,7 @@ const UserDetails = ({ user }) => {
             <div className="user-details-content">
                 {/* Personal Information Card */}
                 <div className="user-details-card">
+                    <span onClick={onClose} className="auth-close-cross">✖</span>
                     <div className="user-details-card-header">
                         <FaIdCard className="user-details-card-icon" />
                         <h2>Personal Information</h2>

@@ -1,7 +1,16 @@
 import React from "react";
 import "./ProductDetails.css";
+import ProductForm from "../../forms/ProductForm";
 
-const ProductDetails = ({ product }) => {
+const ProductDetails = ({ product, onClose }) => {
+  const [close, setClose] = React.useState(true);
+
+  if(!close){
+    return (
+      <ProductForm isCreate={false} productData={product} onClose={() => setClose(true)} />
+    )
+  }
+
   if (!product) return <div className="product-details-empty">No product details available</div>;
 
   const { title, description, price, discount, stock, createdAt, images } = product;
@@ -11,6 +20,7 @@ const ProductDetails = ({ product }) => {
   return (
     <div className="product-details-container">
       {/* Image Section */}
+      <span onClick={onClose} className="auth-close-cross">✖</span>
       <div className="product-details-image-section">
         {primaryImage ? (
           <img
@@ -62,7 +72,7 @@ const ProductDetails = ({ product }) => {
           </p>
         </div>
 
-        <button className="product-details-add-to-cart-btn">Edit Product</button>
+        <button className="product-details-add-to-cart-btn" onClick={() => setClose(false)}>Edit Product</button>
       </div>
     </div>
   );

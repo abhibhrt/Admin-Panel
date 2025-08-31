@@ -13,7 +13,7 @@ const Orders = () => {
   const [viewItem, setViewItem] = useState(null);
 
   if (viewItem) {
-    return viewItem.type === "user" ? <UserDetails user={viewItem.data} /> : <ProductDetails product={viewItem.data} />;
+    return viewItem.type === "user" ? <UserDetails user={viewItem.data} onClose={() => setViewItem(null)} /> : <ProductDetails product={viewItem.data} onClose={() => setViewItem(null)} />;
   }
 
   const statusOptions = ["Pending", "Shipped", "Delivered", "Cancelled"];

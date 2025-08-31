@@ -1,14 +1,19 @@
 import "./Analytics.css";
-import { useSelector } from "react-redux";
+import { useSelector, shallowEqual } from "react-redux";
+import { useMemo } from "react";
 import { FaBoxOpen, FaUsers, FaClipboardList, FaExclamationCircle } from "react-icons/fa";
 
 export default function Analytics() {
   const data = useSelector((state) => state.personal.data);
-  const products = useSelector((state) => state.product.data || []);
-  const users = useSelector((state) => state.user.data || []);
-  const orders = useSelector((state) => state.order.data || []);
 
-  // 🔹 Calculate real stats
+  const rawProducts = useSelector((state) => state.product.data, shallowEqual);
+  const rawUsers = useSelector((state) => state.user.data, shallowEqual);
+  const rawOrders = useSelector((state) => state.order.data, shallowEqual);
+
+  const products = useMemo(() => rawProducts || [], [rawProducts]);
+  const users = useMemo(() => rawUsers || [], [rawUsers]);
+  const orders = useMemo(() => rawOrders || [], [rawOrders]);
+
   const totalProducts = products.length;
   const totalUsers = users.length;
   const pendingOrders = orders.filter((o) => o.status === "Pending").length;
@@ -20,11 +25,11 @@ export default function Analytics() {
       <div className="welcome-card">
         <div className="welcome-content">
           <h2 className="welcome-title">
-            Welcome back, {data.admin?.name} 👋
+            Welcome back, {data?.admin?.name} 👋
           </h2>
           <p className="welcome-text">
             You are logged in as{" "}
-            <span className="role-highlight">{data.admin?.role}</span>.  
+            <span className="role-highlight">{data?.admin?.role}</span>.  
             Here's what's happening with your store today.
           </p>
         </div>
@@ -35,7 +40,6 @@ export default function Analytics() {
 
       {/* Stats Grid */}
       <div className="stats-grid">
-        {/* Products */}
         <div className="stat-card">
           <div className="stat-icon primary">
             <FaBoxOpen />
@@ -46,7 +50,6 @@ export default function Analytics() {
           </div>
         </div>
 
-        {/* Users */}
         <div className="stat-card">
           <div className="stat-icon success">
             <FaUsers />
@@ -57,7 +60,6 @@ export default function Analytics() {
           </div>
         </div>
 
-        {/* Pending Orders */}
         <div className="stat-card">
           <div className="stat-icon warning">
             <FaClipboardList />
@@ -68,7 +70,6 @@ export default function Analytics() {
           </div>
         </div>
 
-        {/* Issues */}
         <div className="stat-card">
           <div className="stat-icon error">
             <FaExclamationCircle />

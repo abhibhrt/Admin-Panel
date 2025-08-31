@@ -9,7 +9,7 @@ const User = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   if (userDetails) {
-    return <UserDetails user={userDetails} />;
+    return <UserDetails user={userDetails} onClose={() => setUserDetails(null)} />;
   }
 
   const filteredUsers = users.filter((user) => {

@@ -57,7 +57,6 @@ model Product {
 model ProductImage {
   id          Int      @id @default(autoincrement())
   url         String
-  publicId    String 
   isPrimary   Boolean  @default(false)
   product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId   Int

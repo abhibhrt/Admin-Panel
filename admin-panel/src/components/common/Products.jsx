@@ -9,12 +9,23 @@ import ProductForm from "../../forms/ProductForm";
 const Products = () => {
   const products = useSelector((state) => state.product.data) || [];
   const dispatch = useDispatch();
+  const [close, setClose] = useState(true);
   const [search, setSearch] = useState("");
   const [operation, setOperation] = useState({
     operate: false,
     isEdit: false,
     product: null,
   });
+
+  if (!close) {
+    return (
+      <ProductForm
+        isCreate={!operation.isEdit}
+        productData={operation.product}
+        onClose={() => setClose(true)}
+      />
+    );
+  }
 
   const handleDelete = async (productId) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
@@ -26,29 +37,15 @@ const Products = () => {
     }
   };
 
-  const handleOperate = async (data) => {
-    if (operation.isEdit) {
-      await api.put(`/products/${operation.product.id}`, data);
-    } else {
-      await api.post("/products", data);
-    }
-    setOperation({ operate: false, isEdit: false, product: null });
-  };
-
   const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="customer-product-container">
-      {operation.operate && <ProductForm
-        isCreate={!operation.isEdit}
-        productData={operation.product}
-        onSubmit={handleOperate}
-      />}
       <div className="customer-product-header">
         <div className="customer-product-actions">
-          <button className="customer-product-add-btn" title="Add Product" onClick={() => setOperation({ operate: true, isEdit: false, product: null })}>
+          <button className="customer-product-add-btn" title="Add Product" onClick={() => {setOperation({ operate: true, isEdit: false, product: null }); setClose(false);}}>
             <FaPlus />
           </button>
         </div>
@@ -104,7 +101,7 @@ const Products = () => {
                   <td className="customer-product-actions">
                     <button
                       className="common-btn-1 info"
-                      onClick={() => setOperation({ operate: true, isEdit: true, product })}
+                      onClick={() => {setOperation({ operate: true, isEdit: true, product }); setClose(false);}}
                     >
                       <FaEdit /> Edit
                     </button>

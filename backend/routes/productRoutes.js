@@ -1,7 +1,6 @@
 import express from "express";
 import prisma from "../utils/prismaClient.js";
 import { protect } from "../middleware/authMiddleware.js";
-import { validateProductData } from "../middleware/validateProductData.js";
 import asyncHandler from "express-async-handler";
 
 const router = express.Router();
@@ -9,7 +8,7 @@ const router = express.Router();
 // CREATE Product with optional images
 router.post(
   "/",
-  protect, validateProductData,
+  protect,
   asyncHandler(async (req, res) => {
     const { title, description, price, discount, stock, images } = req.body;
 
@@ -24,7 +23,6 @@ router.post(
           ? {
             create: images.map((img) => ({
               url: img.url,
-              publicId: img.publicId,
               isPrimary: img.isPrimary || false,
             })),
           }
@@ -78,10 +76,9 @@ router.put(
         stock,
         ...(images && {
           images: {
-            deleteMany: {}, // purane saare images delete
+            deleteMany: {},
             create: images.map((img) => ({
               url: img.url,
-              publicId: img.publicId,
               isPrimary: img.isPrimary || false,
             })),
           },
