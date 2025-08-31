@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-// import "./common.css";
+import "./common.css";
 import { useSelector, useDispatch } from "react-redux";
 import { clearProductData, updateProductData } from "../../redux/private/productSlice";
 import api from "../../utils/axios";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import ProductForm from "../../forms/ProductForm";
+import ProductDetails from "../productdetails/ProductDetails";
 
 const Products = () => {
   const products = useSelector((state) => state.product.data) || [];
   const dispatch = useDispatch();
-  const [close, setClose] = useState(true);
+  const [formOpen, setFormOpen] = useState(false);
+  const [productOpen, setProductOpen] = useState(null);
   const [search, setSearch] = useState("");
   const [operation, setOperation] = useState({
     operate: false,
@@ -17,14 +19,19 @@ const Products = () => {
     product: null,
   });
 
-  if (!close) {
-    return (
+  if (formOpen || productOpen) {
+    return formOpen ?(
       <ProductForm
         isCreate={!operation.isEdit}
         productData={operation.product}
-        onClose={() => setClose(true)}
+        onClose={() => setFormOpen(false)}
       />
-    );
+    ): (
+      <ProductDetails
+        product={productOpen}
+        onClose={() => setProductOpen(null)}
+      />
+    )
   }
 
   const handleDelete = async (productId) => {
@@ -45,7 +52,7 @@ const Products = () => {
     <div className="customer-product-container">
       <div className="customer-product-header">
         <div className="customer-product-actions">
-          <button className="customer-product-add-btn" title="Add Product" onClick={() => {setOperation({ operate: true, isEdit: false, product: null }); setClose(false);}}>
+          <button className="customer-product-add-btn" title="Add Product" onClick={() => {setOperation({ operate: true, isEdit: false, product: null }); setFormOpen(true);}}>
             <FaPlus />
           </button>
         </div>
@@ -71,6 +78,7 @@ const Products = () => {
               <th>Stock</th>
               <th>Created At</th>
               <th>Actions</th>
+              <th>Product</th>
             </tr>
           </thead>
           <tbody>
@@ -101,7 +109,7 @@ const Products = () => {
                   <td className="customer-product-actions">
                     <button
                       className="common-btn-1 info"
-                      onClick={() => {setOperation({ operate: true, isEdit: true, product }); setClose(false);}}
+                      onClick={() => {setOperation({ operate: true, isEdit: true, product }); setFormOpen(true);}}
                     >
                       <FaEdit /> Edit
                     </button>
@@ -110,6 +118,14 @@ const Products = () => {
                       onClick={() => handleDelete(product.id)}
                     >
                       <FaTrash /> Delete
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className="common-btn-1 success"
+                      onClick={() => {setProductOpen(product);}}
+                    >
+                     View
                     </button>
                   </td>
                 </tr>
