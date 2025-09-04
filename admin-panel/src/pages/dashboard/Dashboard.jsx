@@ -19,7 +19,7 @@ export default function Dashboard() {
 
     async function Logout() {
         try {
-            await api.post("/authentication/signout");
+            await api.post("/auth/signout");
             dispatch(clearPersonalData());
         } catch (err) {
             console.error("Logout failed:", err);

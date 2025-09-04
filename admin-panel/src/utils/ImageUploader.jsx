@@ -1,105 +1,99 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
+import api from "./axios";
 
-export default function ImageUploader({
-  value = "",
-  onChange = () => {},
-  cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
-  uploadPreset = import.meta.env.VITE_CLOUDINARY_UNSIGNED_PRESET,
-  folder = import.meta.env.VITE_CLOUDINARY_FOLDER || undefined,
-  maxSizeMB = 5,
-  accept = "image/*",
-  className = "",
-}) {
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
-  const inputRef = useRef(null);
+export default function ImageUploader({ imagesEdit = [], handleImages }) {
+  const [loading, setLoading] = useState(null);
+  const [images, setImages] = useState(imagesEdit);
+  const [err, setErr] = useState(null);
 
-  const resetInput = () => {
-    if (inputRef.current) inputRef.current.value = "";
-  };
+  const uploadImage = async (rawFile) => {
+    if (!rawFile) return;
+    setLoading("Uploading...");
+    setErr(null);
 
-  const clearImage = () => {
-    onChange("");
-    resetInput();
-    setErr("");
-  };
-
-  const handleFile = async (e) => {
-    setErr("");
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-
-    if (!cloudName || !uploadPreset) {
-      setErr("Cloudinary config missing: cloudName / uploadPreset.");
-      resetInput();
-      return;
-    }
-
-    const sizeMB = file.size / (1024 * 1024);
-    if (sizeMB > maxSizeMB) {
-      setErr(`File too large. Max ${maxSizeMB} MB allowed.`);
-      resetInput();
-      return;
-    }
-
-    const fd = new FormData();
-    fd.append("file", file);
-    fd.append("upload_preset", uploadPreset);
-    if (folder) fd.append("folder", folder);
-
-    setLoading(true);
     try {
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        { method: "POST", body: fd }
-      );
-      const data = await res.json();
+      const formData = new FormData();
+      formData.append("file", rawFile);
 
-      if (!res.ok) {
-        throw new Error(data?.error?.message || "Upload failed");
-      }
-      if (!data?.secure_url) {
-        throw new Error("No secure_url returned from Cloudinary");
+      const res = await api.post("/products/images/upload-image", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (!res.data?.success) {
+        throw new Error(res.data?.message || "Upload failed");
       }
 
-      onChange(data.secure_url);
-    } catch (e2) {
-      console.error("Cloudinary upload error:", e2);
-      setErr(e2.message || "Upload error");
-      resetInput();
+      const newImage = {
+        url: res.data.url,
+        isPrimary: images.length===0,
+        publicId: res.data.publicId,
+      };
+
+      const updatedImages = [...images, newImage];
+      setImages(updatedImages);
+      handleImages?.(updatedImages);
+      
+    } catch (error) {
+      console.error(error);
+      setErr(error.message || "Upload failed");
     } finally {
-      setLoading(false);
+      setLoading(null);
+    }
+  };
+
+  const deleteImage = async (publicId) => {
+    setLoading("Deleting...");
+    setErr(null);
+
+    try {
+      const res = await api.post("/products/images/delete-image", { id: publicId });
+
+      if (!res.data?.success && !res.data?.message?.includes("deleted")) {
+        throw new Error(res.data?.message || "Delete failed");
+      }
+
+      const updatedImages = images.filter((img) => img.publicId !== publicId);
+      setImages(updatedImages);
+      handleImages?.(updatedImages);
+    } catch (error) {
+      console.error(error);
+      setErr(error.message || "Delete failed");
+    } finally {
+      setLoading(null);
     }
   };
 
   return (
-    <div className={`image-uploader ${className}`}>
-      {value ? (
-        <div className="uploaded-image-preview">
-          <img src={value} alt="Uploaded" className="preview-img" />
-          <button
-            type="button"
-            className="clear-btn"
-            onClick={clearImage}
-            aria-label="Remove image"
-            title="Remove image"
-          >
-            ✖
-          </button>
-        </div>
-      ) : (
-        <div className="upload-box">
-          <input
-            ref={inputRef}
-            type="file"
-            accept={accept}
-            onChange={handleFile}
-            disabled={loading}
-          />
-          {loading && <p className="uploading-text">Uploading…</p>}
-        </div>
-      )}
+    <div className="image-uploader">
+      <div className="uploaded-image-list">
+        {images && images.map((img) => (
+          <div key={img.publicId} className="uploaded-image-preview">
+            <img src={img.url} alt="Uploaded" className="preview-img" />
+            <button
+              type="button"
+              className="clear-btn"
+              onClick={() => deleteImage(img.publicId)}
+              disabled={loading}
+              aria-label="Remove image"
+              title="Remove image"
+            >
+              ✖
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <div className="upload-box">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => uploadImage(e.target.files[0])}
+          disabled={loading}
+        />
+      </div>
+
       {err && <p className="error-text">{err}</p>}
+      {loading && <p className="uploading-text">{loading}</p>}
     </div>
   );
 }

@@ -6,12 +6,8 @@ import asyncHandler from "express-async-handler";
 const router = express.Router();
 
 // CREATE Product with optional images
-router.post(
-  "/",
-  protect,
-  asyncHandler(async (req, res) => {
+router.post("/", protect, asyncHandler(async (req, res) => {
     const { title, description, price, discount, stock, images } = req.body;
-
     const newProduct = await prisma.product.create({
       data: {
         title,
@@ -19,14 +15,13 @@ router.post(
         price,
         discount,
         stock,
-        images: images
-          ? {
+        images: images? {
             create: images.map((img) => ({
-              url: img.url,
+              url: img.url || "",
               isPrimary: img.isPrimary || false,
+              publicId: img.publicId || ""
             })),
-          }
-          : undefined,
+          } : undefined,
       },
       include: { images: true },
     });
@@ -36,9 +31,7 @@ router.post(
 );
 
 // READ All Products
-router.get(
-  "/",
-  asyncHandler(async (req, res) => {
+router.get("/", asyncHandler(async (req, res) => {
     const products = await prisma.product.findMany({
       include: { images: true },
     });
@@ -46,26 +39,10 @@ router.get(
   })
 );
 
-// READ Single Product
-router.get(
-  "/:id",
-  asyncHandler(async (req, res) => {
-    const product = await prisma.product.findUnique({
-      where: { id: parseInt(req.params.id) },
-      include: { images: true },
-    });
-    if (!product) return res.status(404).json({ error: "Product not found" });
-    res.json(product);
-  })
-);
 
 // UPDATE Product
-router.put(
-  "/:id",
-  protect,
-  asyncHandler(async (req, res) => {
+router.put("/:id", protect, asyncHandler(async (req, res) => {
     const { title, description, price, discount, stock, images } = req.body;
-
     const updatedProduct = await prisma.product.update({
       where: { id: parseInt(req.params.id) },
       data: {
@@ -80,34 +57,26 @@ router.put(
             create: images.map((img) => ({
               url: img.url,
               isPrimary: img.isPrimary || false,
+              publicId: img.publicId || "",
             })),
           },
         }),
       },
       include: { images: true },
     });
-
     res.json(updatedProduct);
   })
 );
 
 // DELETE Product
-router.delete(
-  "/:id",
-  protect,
-  asyncHandler(async (req, res) => {
+router.delete("/:id", protect, asyncHandler(async (req, res) => {
     const productId = parseInt(req.params.id);
-
-    // delete related images first
     await prisma.productImage.deleteMany({
       where: { productId },
     });
-
-    // now delete product
     await prisma.product.delete({
       where: { id: productId },
     });
-
     res.json({ message: "Product and related images deleted" });
   })
 );

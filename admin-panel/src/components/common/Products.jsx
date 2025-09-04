@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./common.css";
 import { useSelector, useDispatch } from "react-redux";
-import { clearProductData, updateProductData } from "../../redux/private/productSlice";
+import { deleteProductData } from "../../redux/private/productSlice";
 import api from "../../utils/axios";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import ProductForm from "../../forms/ProductForm";
@@ -38,7 +38,7 @@ const Products = () => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
     try {
       await api.delete(`/products/${productId}`);
-      //   dispatch(clearProductData());
+      dispatch(deleteProductData(productId));
     } catch (error) {
       alert("Failed to delete product!");
     }
@@ -90,7 +90,7 @@ const Products = () => {
               </tr>
             ) : (
               filteredProducts.map((product, index) => (
-                <tr key={product.id} className="customer-product-row">
+                <tr key={product.id || index+1} className="customer-product-row">
                   <td>{product.id || index + 1}</td>
                   <td>
                     <img

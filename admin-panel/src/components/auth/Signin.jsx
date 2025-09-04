@@ -17,7 +17,7 @@ export default function Signin({ setAuth }) {
     setIsLoading(true);
 
     try {
-      const res = await api.post("/authentication/signin", form);
+      const res = await api.post("/auth/signin", form);
       setMsg({ message: res.data.message, status: "success" });
       setAuth(null);
       window.location.reload();
@@ -71,7 +71,7 @@ export default function Signin({ setAuth }) {
               <span className="checkmark"></span>
               Remember me
             </label>
-            <a href="/forgot-password" className="forgot-link">Forgot Password?</a>
+            <span onClick={() => setAuth(1)} className="auth-link">forgot password?</span>
           </div>
 
           <button
@@ -97,7 +97,7 @@ export default function Signin({ setAuth }) {
         )}
 
         <div className="auth-footer">
-          <p>Don't have an account? <button onClick={() => setAuth(1)} className="auth-link">Sign Up</button></p>
+          <p>Admin Access Only!</p>
         </div>
       </div>
     </div>

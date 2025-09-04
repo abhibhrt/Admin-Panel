@@ -5,45 +5,42 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
-import authRoutes from "./routes/authRoutes.js";
-import meRoutes from "./routes/meRoutes.js";
-import productRoutes from "./routes/productRoutes.js";
-import orderRoutes from "./routes/orderRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-
-import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+import authentication from "./routes/authentication.js";
+import personal from "./routes/personal.js";
+import products from "./routes/products.js";
+import orders from "./routes/orders.js";
+import users from "./routes/users.js";
+import imageloader from "./routes/imageloader.js"
+import createAdmins from "./utils/createAdmins.js";
 
 dotenv.config();
-
 const app = express();
 
-// ---------- Middlewares ---------- process.env.CLIENT_ORIGIN ||
+// ---------- Middlewares ----------
 app.use(
   cors({
-    origin: ["https://admin-panel-tau.vercel.app", "http://localhost:5173"],
+    origin: [ "https://admin-panel-tau.vercel.app", process.env.CLIENT_ORIGIN ],
     credentials: true,
   })
 );
 app.use(helmet());
 app.use(morgan("dev"));
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
+createAdmins()
 
 // ---------- Routes ----------
-app.use("/api/authentication", authRoutes);
-app.use("/api/authentication", meRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/auth", authentication);
+app.use("/api/personal", personal);
+app.use("/api/products", products);
+app.use("/api/orders", orders);
+app.use("/api/users", users);
+app.use("/api/products/images", imageloader);
 
 // ---------- Test Route ----------
 app.get("/", (req, res) => {
   res.json({ message: "Admin Control Running..." });
 });
-
-// ---------- Error Middleware ----------
-app.use(notFound);
-app.use(errorHandler);
 
 // ---------- Start Server ----------
 const PORT = process.env.PORT || 5001;

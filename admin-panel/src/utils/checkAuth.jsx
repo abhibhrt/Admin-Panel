@@ -9,7 +9,7 @@ export default function CheckAuth() {
     useEffect(() => {
         const verifyAuth = async () => {
             try {
-                const res = await api.get("/authentication/me");
+                const res = await api.get("/personal/me");
                 if (res.data) {
                     dispatch(setPersonalData(res.data));
                 }

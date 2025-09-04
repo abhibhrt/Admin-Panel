@@ -2,8 +2,8 @@ import { useState } from "react";
 import api from "../../utils/axios";
 import "./auth.css";
 
-export default function Signup({ setAuth }) {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+export default function Reset({ setAuth }) {
+  const [form, setForm] = useState({ name: "", email: "", newPassword: "" });
   const [msg, setMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -17,7 +17,7 @@ export default function Signup({ setAuth }) {
     setIsLoading(true);
 
     try {
-      const res = await api.post("/authentication/signup", form);
+      const res = await api.post("/auth/reset-password", form);
       setMsg({ message: res.data.message, status: "success" });
       setAuth(null);
       window.location.reload();
@@ -33,8 +33,8 @@ export default function Signup({ setAuth }) {
       <div className="auth-card">
         <span onClick={() => setAuth(null)} className="auth-close-cross">✖</span>
         <div className="auth-header">
-          <h2 className="auth-title">Create Account</h2>
-          <p className="auth-subtitle">Join us to get started</p>
+          <h2 className="auth-title">Reset Password</h2>
+          <p className="auth-subtitle">otp validation required</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
@@ -67,15 +67,15 @@ export default function Signup({ setAuth }) {
 
           <div className="input-group">
             <input
-              name="password"
+              name="newPassword"
               type="password"
               placeholder=" "
-              value={form.password}
+              value={form.newPassword}
               onChange={handleChange}
               required
               className="auth-input"
             />
-            <label className="input-label">Password</label>
+            <label className="input-label">New Password</label>
 
           </div>
 
@@ -87,10 +87,10 @@ export default function Signup({ setAuth }) {
             {isLoading ? (
               <>
                 <span className="spinner"></span>
-                Creating Account...
+                otp sendig...
               </>
             ) : (
-              'Register Now'
+              'Send OTP'
             )}
           </button>
         </form>
@@ -102,7 +102,7 @@ export default function Signup({ setAuth }) {
         )}
 
         <div className="auth-footer">
-          <p>Already have an account? <button onClick={() => setAuth(2)} className="auth-link">Sign In</button></p>
+          <p><button onClick={() => setAuth(2)} className="auth-link">Sign In</button></p>
         </div>
       </div>
     </div>

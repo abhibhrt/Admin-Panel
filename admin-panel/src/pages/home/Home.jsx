@@ -1,6 +1,6 @@
 import "./Home.css";
 import react, { useState } from "react";
-import Signup from "../../components/auth/Signup";
+import Reset from "../../components/auth/ResetPassword";
 import Signin from "../../components/auth/Signin";
 import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
@@ -23,13 +23,6 @@ export default function Home() {
                     {
                         !authorised ? (
                             <div className="cta-buttons">
-                                <button
-                                    onClick={() => setAuth(1)}
-                                    className="cta-btn primary"
-                                >
-                                    Sign Up
-                                </button>
-
                                 <button
                                     onClick={() => setAuth(2)}
                                     className="cta-btn secondary"
@@ -92,7 +85,7 @@ export default function Home() {
                 <div className="shape shape-3"></div>
                 <div className="shape shape-4"></div>
             </div>
-            <div className="auth-popup"> {auth && (auth == 1 ? (<Signup setAuth={setAuth} />) : (<Signin setAuth={setAuth} />))} </div>
+            <div className="auth-popup"> {auth && (auth == 1 ? (<Reset setAuth={setAuth} />) : (<Signin setAuth={setAuth} />))} </div>
         </div>
     );
 }

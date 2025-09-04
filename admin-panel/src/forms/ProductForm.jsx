@@ -2,18 +2,22 @@ import React, { useState, useEffect } from "react";
 import "./ProductForm.css";
 import api from "../utils/axios";
 import ImageUploader from "../utils/ImageUploader";
+import { updateProductData, addProductData  } from "../redux/private/productSlice";
+import { useDispatch } from "react-redux";
 
 const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     price: "",
     discount: "",
     stock: "",
-    images: [{ url: "", isPrimary: false }],
+    images: [],
   });
 
-  // Pre-fill for editing
+  // Pre-fill form when editing
   useEffect(() => {
     if (!isCreate && productData) {
       setFormData({
@@ -22,69 +26,48 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
         price: productData.price?.toString() || "",
         discount: productData.discount?.toString() || "",
         stock: productData.stock?.toString() || "",
-        images:
-          productData.images?.length > 0
-            ? productData.images.map((img) => ({
-                url: img.url || "",
-                isPrimary: img.isPrimary || false,
-              }))
-            : [{ url: "", isPrimary: false }],
+        images: productData.images || [],
       });
     }
   }, [isCreate, productData]);
 
-  // Handle input changes
+  // Handle text/number input change
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     if (type === "number" && value !== "" && Number(value) < 0) return;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle image change
-  const handleImageChange = (index, field, value) => {
-    setFormData((prev) => {
-      const updatedImages = [...prev.images];
-      updatedImages[index][field] = value;
-      return { ...prev, images: updatedImages };
-    });
-  };
-
-  // Add image slot
-  const addImage = () => {
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, { url: "", isPrimary: false }],
-    }));
-  };
-
-  // Remove image slot
-  const removeImage = (index) => {
-    setFormData((prev) => {
-      const updatedImages = [...prev.images];
-      updatedImages.splice(index, 1);
-      return { ...prev, images: updatedImages };
-    });
+  // Handle image updates from ImageUploader
+  const handleImages = (images) => {
+    console.log(images)
+    setFormData((prev) => ({ ...prev, images }));
   };
 
   const submitNow = async (data) => {
     try {
-      if (!isCreate) {
-        await api.put(`/products/${productData.id}`, data);
-      } else {
+      setLoading(true)
+      if (isCreate) {
         await api.post("/products", data);
+        dispatch(addProductData(data))
+      } else {
+        await api.put(`/products/${productData.id}`, data);
+        dispatch(updateProductData({id: productData.id, updates: data}));
       }
+      setLoading(false)
+      onClose?.();
     } catch (error) {
       console.error("Error submitting form:", error);
+    } finally {
+      setFormData({
+        title: "",
+        description: "",
+        price: "",
+        discount: "",
+        stock: "",
+        images: [],
+      });
     }
-    setFormData({
-      title: "",
-      description: "",
-      price: "",
-      discount: "",
-      stock: "",
-      images: [{ url: "", isPrimary: false }],
-    });
-    onClose();
   };
 
   const handleSubmit = (e) => {
@@ -95,6 +78,7 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
       discount: parseInt(formData.discount) || 0,
       stock: parseInt(formData.stock) || 0,
     };
+
     submitNow(finalData);
   };
 
@@ -133,7 +117,7 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
         <div className="product-form-group">
           <label className="product-form-label">Price (₹)</label>
           <input
-            type="number"
+            type="text"
             name="price"
             value={formData.price}
             onChange={handleChange}
@@ -148,7 +132,7 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
         <div className="product-form-group">
           <label className="product-form-label">Discount (%)</label>
           <input
-            type="number"
+            type="text"
             name="discount"
             value={formData.discount}
             onChange={handleChange}
@@ -162,7 +146,7 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
         <div className="product-form-group">
           <label className="product-form-label">Stock</label>
           <input
-            type="number"
+            type="text"
             name="stock"
             value={formData.stock}
             onChange={handleChange}
@@ -173,46 +157,15 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
           />
         </div>
 
-        {/* 🔥 Image Upload Section */}
         <div className="product-form-group">
-          <label className="product-form-label">Images</label>
-          {formData.images.map((img, index) => (
-            <div key={index} className="product-form-image-group">
-              <ImageUploader
-                value={img.url}
-                onChange={(newUrl) => handleImageChange(index, "url", newUrl)}
-              />
-              <label className="product-form-checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={img.isPrimary}
-                  onChange={(e) =>
-                    handleImageChange(index, "isPrimary", e.target.checked)
-                  }
-                  className="product-form-checkbox"
-                />
-                Primary
-              </label>
-              <button
-                type="button"
-                onClick={() => removeImage(index)}
-                className="product-form-delete-btn"
-              >
-                X
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={addImage}
-            className="product-form-add-btn"
-          >
-            + Add Image
-          </button>
+          <ImageUploader
+            imagesEdit={!isCreate ? productData.images : []}
+            handleImages={handleImages}
+          />
         </div>
 
-        <button type="submit" className="product-form-submit-btn">
-          {isCreate ? "Create Product" : "Update Product"}
+        <button type="submit" className="product-form-submit-btn" disabled={loading}>
+          {loading? "Please Wait..." :(isCreate ? "Create Product" : "Update Product")}
         </button>
       </form>
     </div>

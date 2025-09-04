@@ -3,7 +3,7 @@ CREATE TABLE "public"."User" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "mobNo" TEXT NOT NULL,
+    "mobNo" TEXT,
     "password" TEXT NOT NULL,
     "role" TEXT NOT NULL DEFAULT 'customer',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -52,9 +52,9 @@ CREATE TABLE "public"."Product" (
 CREATE TABLE "public"."ProductImage" (
     "id" SERIAL NOT NULL,
     "url" TEXT NOT NULL,
-    "publicId" TEXT NOT NULL,
     "isPrimary" BOOLEAN NOT NULL DEFAULT false,
     "productId" INTEGER NOT NULL,
+    "publicId" TEXT NOT NULL,
 
     CONSTRAINT "ProductImage_pkey" PRIMARY KEY ("id")
 );
@@ -96,9 +96,6 @@ CREATE TABLE "public"."Cart" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_mobNo_key" ON "public"."User"("mobNo");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Address_userId_key" ON "public"."Address"("userId");
