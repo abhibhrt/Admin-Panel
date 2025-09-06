@@ -38,7 +38,7 @@ app.use("/api/users", users);
 app.use("/api/products/images", imageloader);
 
 // ---------- Test Route ----------
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.json({ message: "Admin Control Running..." });
 });
 
