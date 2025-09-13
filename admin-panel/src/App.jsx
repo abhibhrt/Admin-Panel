@@ -17,7 +17,7 @@ function App() {
       try {
         const wake = await fetch(import.meta.env.VITE_API_URL);
         if (wake.ok) {
-          console.log("Server Ready");
+          console.log("Server Is Ready Now");
           setLoading(false)
         }
       } catch (err) {
