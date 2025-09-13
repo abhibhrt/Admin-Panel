@@ -71,7 +71,7 @@ export default function ImageUploader({ imagesEdit = [], handleImages }) {
             <img src={img.url} alt="Uploaded" className="preview-img" />
             <button
               type="button"
-              className="clear-btn"
+              className="image-clear-btn"
               onClick={() => deleteImage(img.publicId)}
               disabled={loading}
               aria-label="Remove image"

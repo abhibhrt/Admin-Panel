@@ -17,6 +17,7 @@ router.get("/",  protect,  asyncHandler(async (req, res) => {
         product: {
           include: {
             images: true,
+            highlights: true,
           },
         },
       },

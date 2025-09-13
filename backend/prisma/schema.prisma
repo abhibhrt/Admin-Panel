@@ -8,17 +8,17 @@ datasource db {
 }
 
 model User {
-  id          Int       @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String
-  email       String    @unique
+  email       String     @unique
   mobNo       String?
   password    String
-  role        String    @default("customer")
+  role        String     @default("customer")
   address     Address?
   orders      Orders[]
   cartItems   Cart[]
   reviews     Reviews[]
-  createdAt   DateTime  @default(now())
+  createdAt   DateTime   @default(now())
 }
 
 model Address {
@@ -27,17 +27,17 @@ model Address {
   city        String
   pincode     String
   addressLine String
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int       @unique
 }
 
 model Admin {
-  id          Int       @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String
-  email       String    @unique
+  email       String     @unique
   password    String
-  role        String    @default("admin")
-  createdAt   DateTime  @default(now())
+  role        String     @default("admin")
+  createdAt   DateTime   @default(now())
 }
 
 model Product {
@@ -47,11 +47,24 @@ model Product {
   price       Float
   discount    Int
   stock       Int
+  sizes       String          @default("S, M, L, XL")
+  delivery    Int             @default(7)
+  shipCharge  Int             @default(0)
+  returnable  Int             @default(0)
+  highlights  Highlights[]
   images      ProductImage[]
+  reviews     Reviews[]
   orders      Orders[]
   cartItems   Cart[]
-  reviews     Reviews[]
   createdAt   DateTime        @default(now())
+}
+
+model Highlights {
+  id          Int      @id @default(autoincrement())
+  key         String
+  value       String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId   Int
 }
 
 model ProductImage {
@@ -65,10 +78,10 @@ model ProductImage {
 
 model Orders {
   id          Int        @id @default(autoincrement())
-  user        User       @relation(fields: [userId], references: [id])
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
-  product     Product    @relation(fields: [productId], references: [id])
-  productId   Int
+  product     Product?   @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId   Int?
   quantity    Int
   expected    DateTime
   total       Float
@@ -79,9 +92,9 @@ model Orders {
 
 model Reviews {
   id          Int       @id @default(autoincrement())
-  product     Product   @relation(fields: [productId], references: [id])
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId   Int
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   rating      Int
   feedback    String
@@ -89,8 +102,8 @@ model Reviews {
 
 model Cart {
   id          Int       @id @default(autoincrement())
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
-  product     Product   @relation(fields: [productId], references: [id])
-  productId   Int
+  product     Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId   Int?
 }

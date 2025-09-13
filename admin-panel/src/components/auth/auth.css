@@ -36,6 +36,10 @@
   color: var(--text-tertiary);
   cursor: pointer;
   transition: all 0.3s ease;
+  background-color: var(--neutral-light);
+  padding: .5rem .8rem;
+  border-radius: 50%;
+  z-index: 99;
 }
 
 .auth-close-cross:hover {

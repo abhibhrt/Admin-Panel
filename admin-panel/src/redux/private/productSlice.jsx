@@ -22,7 +22,7 @@ export const productSlice = createSlice({
       const { id, updates } = action.payload;
       const index = state.data.findIndex(product => product.id === id);
       if (index !== -1) {
-        state.data[index] = updates;
+        state.data[index] = {...updates, id: id};
       }
     },
 
