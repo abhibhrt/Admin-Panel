@@ -49,7 +49,6 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
   // Handle field change
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    if (type === "number" && value !== "" && Number(value) < 0) return;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -179,7 +178,7 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
         <div className="product-form-group">
           <label className="product-form-label">Discount (%)</label>
           <input
-            type="number"
+            type="text"
             name="discount"
             value={formData.discount}
             onChange={handleChange}
@@ -194,7 +193,7 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
         <div className="product-form-group">
           <label className="product-form-label">Stock</label>
           <input
-            type="number"
+            type="text"
             name="stock"
             value={formData.stock}
             onChange={handleChange}
@@ -239,7 +238,7 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
         <div className="product-form-group">
           <label className="product-form-label">Delivery (days)</label>
           <input
-            type="number"
+            type="text"
             name="delivery"
             value={formData.delivery}
             onChange={handleChange}
@@ -252,7 +251,7 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
         <div className="product-form-group">
           <label className="product-form-label">Shipping Charge (₹)</label>
           <input
-            type="number"
+            type="text"
             name="shipCharge"
             value={formData.shipCharge}
             onChange={handleChange}
@@ -265,7 +264,7 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
         <div className="product-form-group">
           <label className="product-form-label">Returnable (days)</label>
           <input
-            type="number"
+            type="text"
             name="returnable"
             value={formData.returnable}
             onChange={handleChange}
