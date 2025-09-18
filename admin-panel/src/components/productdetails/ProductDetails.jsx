@@ -70,6 +70,7 @@ const ProductDetails = ({ product, onClose }) => {
 
         {/* Additional Info */}
         <div className="product-details-meta">
+          <p><strong>Category:</strong> {product.category || "Uncategorized"}</p>
           <p><strong>Sizes:</strong> {product.sizes}</p>
           <p><strong>Delivery:</strong> {product.delivery} days</p>
           <p><strong>Shipping Charge:</strong> ₹{product.shipCharge}</p>

@@ -14,7 +14,8 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
     price: "",
     discount: "",
     stock: "",
-    sizes: "S, M, L, XL",
+    category: "",
+    sizes: "",
     delivery: 7,
     shipCharge: 0,
     returnable: 0,
@@ -31,6 +32,7 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
         price: productData.price?.toString() || "",
         discount: productData.discount?.toString() || "",
         stock: productData.stock?.toString() || "",
+        category: productData.category || "general",
         sizes: productData.sizes || "S, M, L, XL",
         delivery: productData.delivery || 7,
         shipCharge: productData.shipCharge || 0,
@@ -201,6 +203,23 @@ const ProductForm = ({ isCreate = true, productData = {}, onClose }) => {
             min="0"
             required
           />
+        </div>
+
+        {/* Category */}
+        <div className="product-form-group">
+          <label className="product-form-label">Category</label>
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            className="product-form-input"
+          >
+            <option value="general">General</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="kid/boy">Kid/Boy</option>
+            <option value="kid/girl">Kid/Girl</option>
+          </select>
         </div>
 
         {/* Sizes */}

@@ -43,6 +43,7 @@ CREATE TABLE "public"."Product" (
     "price" DOUBLE PRECISION NOT NULL,
     "discount" INTEGER NOT NULL,
     "stock" INTEGER NOT NULL,
+    "category" TEXT NOT NULL,
     "sizes" TEXT NOT NULL DEFAULT 'S, M, L, XL',
     "delivery" INTEGER NOT NULL DEFAULT 7,
     "shipCharge" INTEGER NOT NULL DEFAULT 0,
@@ -95,6 +96,7 @@ CREATE TABLE "public"."Reviews" (
     "userId" INTEGER NOT NULL,
     "rating" INTEGER NOT NULL,
     "feedback" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Reviews_pkey" PRIMARY KEY ("id")
 );

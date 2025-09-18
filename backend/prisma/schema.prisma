@@ -47,6 +47,7 @@ model Product {
   price       Float
   discount    Int
   stock       Int
+  category    String
   sizes       String          @default("S, M, L, XL")
   delivery    Int             @default(7)
   shipCharge  Int             @default(0)
@@ -98,6 +99,7 @@ model Reviews {
   userId      Int
   rating      Int
   feedback    String
+  createdAt   DateTime   @default(now())
 }
 
 model Cart {
