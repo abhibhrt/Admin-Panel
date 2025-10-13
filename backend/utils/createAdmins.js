@@ -2,9 +2,9 @@ import prisma from "./prismaClient.js";
 import bcrypt from "bcryptjs";
 
 const admin = {
-  name: "Hameem Khan",
+  name: "Abhishek Bharti",
   role: "superadmin",
-  email: "adjack720@gmail.com", // khanhameem77@gmail.com
+  email: "adjack720@gmail.com",
   password: "admin@123"
 };
 
