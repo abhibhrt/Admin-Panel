@@ -19,7 +19,7 @@ const app = express();
 // ---------- Middlewares ----------
 app.use(
   cors({
-    origin: "https://whitebirdspanel.vercel.app",
+    origin: "https://admin-panel-abhibhrt.vercel.app",
     credentials: true,
   })
 );
