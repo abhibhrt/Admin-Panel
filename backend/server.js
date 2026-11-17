@@ -19,7 +19,7 @@ const app = express();
 // ---------- Middlewares ----------
 app.use(
   cors({
-    origin: "https://admin-panel-eight-neon.vercel.app",
+    origin: true,
     credentials: true,
   })
 );
